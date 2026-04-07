@@ -10,12 +10,31 @@ const poolConfig = {
 
 if (process.env.DATABASE_URL) {
   poolConfig.connectionString = process.env.DATABASE_URL;
+
+  try {
+    const url = new URL(process.env.DATABASE_URL);
+    logger.info('Configuracion PostgreSQL cargada desde DATABASE_URL', {
+      host: url.hostname,
+      port: url.port || '5432',
+      database: url.pathname.replace(/^\//, ''),
+      ssl: url.searchParams.get('sslmode') || 'default'
+    });
+  } catch {
+    logger.warn('DATABASE_URL esta definido pero no se pudo parsear para diagnostico');
+  }
 } else {
   poolConfig.host     = process.env.DB_HOST     || 'localhost';
   poolConfig.port     = parseInt(process.env.DB_PORT) || 5432;
   poolConfig.database = process.env.DB_NAME     || 'erp';
   poolConfig.user     = process.env.DB_USER     || process.env.USER;
   poolConfig.password = process.env.DB_PASSWORD || '';
+
+  logger.warn('DATABASE_URL no definido; usando variables DB_* o fallback local', {
+    host: poolConfig.host,
+    port: poolConfig.port,
+    database: poolConfig.database,
+    user: poolConfig.user || 'undefined'
+  });
 }
 
 const pool = new Pool(poolConfig);

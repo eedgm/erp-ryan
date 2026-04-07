@@ -7,7 +7,8 @@
     "start":    "node src/server.js",
     "dev":      "nodemon src/server.js",
     "migrate":  "node src/config/migrate-all.js",
-    "seed":     "node src/config/seed-all.js"
+    "seed":     "node src/config/seed-all.js",
+    "check-env": "node src/config/check-env.js"
   },
   "engines": {
     "node": ">=18.0.0"
