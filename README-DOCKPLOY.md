@@ -132,3 +132,4 @@ Urls locales:
 - `FRONTEND_URL` debe coincidir exactamente con el dominio real del frontend para que CORS funcione.
 - No metas migraciones y seed en el comando normal de arranque del backend.
 - El logger del backend escribe a `logs/`; en contenedores sirve para pruebas, pero a futuro conviene moverlo a stdout.
+- Los `package-lock.json` no estan versionados en este repo. Por eso los Dockerfiles usan `npm install` en vez de `npm ci`. Si luego versionas los lockfiles, conviene volver a `npm ci` para builds reproducibles.
