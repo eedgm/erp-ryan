@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const runtimeApiUrl = window.__APP_CONFIG__?.VITE_API_URL;
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: runtimeApiUrl || import.meta.env.VITE_API_URL || '/api',
   timeout: 15000,
   headers: { 'Content-Type': 'application/json' },
 });

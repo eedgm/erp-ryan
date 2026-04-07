@@ -79,15 +79,15 @@ Crear otra aplicacion desde el mismo repositorio usando como directorio raiz `fr
 - Puerto interno: `80`
 - Dominio sugerido: `erp.tudominio.com`
 
-Este frontend usa Vite, asi que `VITE_API_URL` se inyecta en build, no en runtime.
+Este frontend ahora soporta `VITE_API_URL` en runtime dentro del contenedor usando `/config.js` generado al arrancar nginx.
 
-En Dockploy debes definir este build arg:
+En Dockploy debes definir esta variable de entorno en el servicio `frontend`:
 
 ```env
 VITE_API_URL=https://api-erp.tudominio.com/api
 ```
 
-Si Dockploy te muestra una seccion separada para build arguments, cargalo ahi. Si solo permite variables de build en la configuracion del Dockerfile, usa ese mismo valor como build arg.
+Si Dockploy tambien te pide build args, puedes dejar el valor por defecto. La variable importante ahora es la de runtime del contenedor frontend.
 
 ## Orden de despliegue
 
@@ -129,6 +129,7 @@ Urls locales:
 ## Notas importantes
 
 - El frontend usa `BrowserRouter`, por eso `frontend/nginx.conf` incluye fallback a `index.html`.
+- El frontend lee `VITE_API_URL` desde `window.__APP_CONFIG__` generado al arrancar el contenedor. Si cambias la variable en Dockploy, debes redeployar el frontend para regenerar `config.js`.
 - `FRONTEND_URL` debe coincidir exactamente con el dominio real del frontend para que CORS funcione.
 - No metas migraciones y seed en el comando normal de arranque del backend.
 - El logger del backend escribe a `logs/`; en contenedores sirve para pruebas, pero a futuro conviene moverlo a stdout.

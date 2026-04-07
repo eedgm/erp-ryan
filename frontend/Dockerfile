@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 
-ARG VITE_API_URL=http://localhost:3000/api
+ARG VITE_API_URL=/api
 ENV VITE_API_URL=$VITE_API_URL
 
 RUN npm run build
@@ -15,6 +15,9 @@ RUN npm run build
 FROM nginx:1.27-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker-entrypoint.d/40-env-config.sh /docker-entrypoint.d/40-env-config.sh
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+RUN chmod +x /docker-entrypoint.d/40-env-config.sh
 
 EXPOSE 80
